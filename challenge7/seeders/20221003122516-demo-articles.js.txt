@@ -1,0 +1,33 @@
+"use strict";
+
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    return await queryInterface.bulkInsert("userdata", [
+      {
+        username: "username  yang pertama",
+        password: "password yang pertama",
+        userId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        username: "username  yang kedua",
+        password: "password yang kedua",
+        userId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        username: "username  yang ketiga",
+        password: "password yang ketiga",
+        userId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
+  },
+
+  async down(queryInterface, Sequelize) {
+    return await queryInterface.bulkDelete("userdata", null);
+  },
+};

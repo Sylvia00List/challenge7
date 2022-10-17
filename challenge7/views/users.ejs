@@ -1,0 +1,15 @@
+
+<html>
+<head>
+ <title>USERLIST | All</title>
+</head>
+<body>
+ <% users.forEach(i => { %>
+ <div>
+ <h1><%= i.username %></h1>
+ <p><%= i.password %></p>
+ <a href="/users\/<%= i.id %>">LIST OF USER</a>
+ </div>
+ <% }) %>
+</body>
+</html

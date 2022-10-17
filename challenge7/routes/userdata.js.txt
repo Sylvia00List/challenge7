@@ -1,0 +1,77 @@
+const express = require('express');
+const router = express.Router();
+const authMiddleware = require('../middleware/authMiddleware');
+const { userdata } = require('../models');
+const { updateUserDataById, userdata, deleteUserDataById } = require('../controllers/userdataController');
+
+// router.use(authMiddleware);
+
+router.get('/', async (req, res) => {
+	const page = req.query.page || 1;
+	const limit = req.query.limit || 10;
+	const offset = page > 1 ? (page - 1) * limit : 0;
+
+	const results = await userdata.findAll({
+		offset,
+		limit,
+		order: [['updatedAt', 'DESC']],
+	});
+	res.json(results);
+	res.render('userdata/list', { results });
+});
+
+router.get('/create', function (req, res, next) {
+	res.render('userdata/create', { id: null });
+});
+
+router.get('/:id/update', function (req, res, next) {
+	res.render('userdata/create', {
+		id: req.params.id,
+	});
+});
+
+/**
+ * @deprecated
+ */
+router.post('/:id', async function (req, res) {
+	const { title, body } = req.body;
+	const update = await userdata.update(
+		{
+			username,
+			password,
+		},
+		{
+			where: { id: req.params.id },
+		}
+	);
+
+	if (update) {
+		return res.send('update data berhasil');
+	}
+	return res.send('update data gagal');
+});
+
+
+//  Monolith
+
+router.post('/', async (req, res) => {
+	const { username, password, id, method } = req.body;
+
+	if (method === 'PUT') {
+		return updateUserDataById(id, { username, password }).then((result) => {
+			res.json(result);
+		});
+	}
+
+	if (method === 'DELETE') {
+		return deleteUserDataById(id).then((result) => {
+			res.json(result);
+		});
+	}
+
+	return insertUserData({ username, password }).then((result) => {
+		res.json(result);
+	});
+});
+
+module.exports = router;
